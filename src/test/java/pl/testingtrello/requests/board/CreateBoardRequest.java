@@ -1,20 +1,19 @@
 package pl.testingtrello.requests.board;
 
-import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import pl.testingtrello.secrets.Authentication;
+import pl.testingtrello.requests.base.BaseRequest;
 import pl.testingtrello.url.TrelloUrl;
+
+import java.util.Map;
 
 import static io.restassured.RestAssured.given;
 
 public class CreateBoardRequest {
-    public static Response createBoardResponse(String boardName) {
+    public static Response createBoardResponse(Map<String, String> queryParams) {
 
         return given()
-                .contentType(ContentType.JSON)
-                .queryParam("name", boardName)
-                .queryParam("key", Authentication.getApiKey())
-                .queryParam("token", Authentication.getApiToken())
+                .queryParams(queryParams)
+                .spec(BaseRequest.requestSetup())
                 .when()
                 .post(TrelloUrl.getBoardsUrl())
                 .then()
