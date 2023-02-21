@@ -3,7 +3,8 @@ package pl.testingtrello.tests.board;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.Assertions;
+//import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import pl.testingtrello.requests.board.CreateBoardRequest;
 import pl.testingtrello.requests.board.DeleteBoardRequest;
@@ -23,16 +24,16 @@ class CreateBoardTests {
         // Create a new board
         final Response createBoardResponse = CreateBoardRequest.createBoardResponse(queryParams);
 
-        Assertions.assertEquals(HttpStatus.SC_OK, createBoardResponse.getStatusCode());
+        Assertions.assertThat(createBoardResponse.getStatusCode()).isEqualTo(HttpStatus.SC_OK);
 
         JsonPath json = createBoardResponse.jsonPath();
-        Assertions.assertEquals(boardName, json.getString("name"));
+        Assertions.assertThat(json.getString("name")).isEqualTo(boardName);
 
         // Delete the board
         boardId = json.getString("id");
 
         final Response deleteBoardResponse = DeleteBoardRequest.deleteBoardResponse(boardId);
 
-        Assertions.assertEquals(HttpStatus.SC_OK, deleteBoardResponse.getStatusCode());
+        Assertions.assertThat(deleteBoardResponse.getStatusCode()).isEqualTo(HttpStatus.SC_OK);
     }
 }
